@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import TopBar from './components/TopBar';
 import AuthChecker from './components/AuthChecker';
+import Queue from './containers/Queue';
 import './App.css';
 
 class App extends React.Component {
@@ -33,14 +34,6 @@ class App extends React.Component {
 			</Router>
     );
   }
-}
-
-function Queue() {
-  return (
-    <div>
-      <h2>Queue</h2>
-    </div>
-  );
 }
 
 function Orders() {

@@ -15,10 +15,16 @@ class AuthChecker extends React.Component {
 			this.props.authCheckOK();
 		})
 		.catch(err => {
-			if (err.response.status && err.response.status === 401) {
-				console.log(err.response);
-				this.setState({statusMsg: "Check failed. Redirecting to login..."});
-				window.location = process.env.REACT_APP_BACKEND_URL + '/admin';
+			if (err.response) {
+				if (err.response.status === 401) {
+					this.setState({statusMsg: "Not logged in. Redirecting to login..."});
+					window.location = process.env.REACT_APP_BACKEND_URL + '/admin';
+				} else if (err.response.status === 403) {
+					this.setState({statusMsg: "Sorry, you are not an admin."})
+				}
+			} else {
+				console.log("bruh")
+				console.log(err)
 			}
 		})
 	}
