@@ -10,7 +10,7 @@ class AuthChecker extends React.Component {
 	}
 
 	componentDidMount() {
-		api.fetchUrl("/api/admin-info")
+		api.fetchUrl("/api/admin/my-info")
 		.then(response => {
 			this.props.authCheckOK();
 		})
