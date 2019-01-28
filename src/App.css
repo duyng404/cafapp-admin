@@ -1,0 +1,36 @@
+.ca-queue-row {
+	height: 70px;
+	cursor: pointer;
+}
+
+.ca-checkbox {
+	font-size: 1.5rem;
+	opacity: 0;
+	transition-property: opacity;
+	transition-duration: .2s;
+}
+
+.ca-checkbox.ca-checked {
+	opacity: 100 !important;
+}
+
+.ca-queue-row:hover .ca-checkbox {
+	opacity: 100;
+}
+
+.ca-no-underline {
+	text-decoration: none !important;
+}
+
+.ca-item-small {
+	color: #555;
+	font-size: 0.8rem;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.ca-tag {
+	font-family: 'Fira Mono', monospace;
+	font-size: 1.25rem;
+}

@@ -9,6 +9,9 @@ export const OrderStatusPrepping  = 40
 export const OrderStatusShipping  = 50
 export const OrderStatusDelivered = 60
 
+export const RowTypeNormal = 1
+export const RowTypeIncluded = 2
+
 // types
 
 export const userType = PropTypes.shape ({
@@ -35,6 +38,11 @@ export const productType = PropTypes.shape ({
 	status: PropTypes.number,
 })
 
+export const destinationType = PropTypes.shape ({
+	name: PropTypes.string,
+	tag: PropTypes.string,
+})
+
 export const orderRowType = PropTypes.shape ({
 	product_id: PropTypes.number,
 	product: productType,
@@ -49,12 +57,13 @@ export const orderType = PropTypes.shape ({
 	updated_at: PropTypes.string,
 	uuid: PropTypes.string,
 	tag: PropTypes.string,
-	user_id: PropTypes.string,
+	user_id: PropTypes.number,
 	user: userType,
 	delivery_fee_in_cents: PropTypes.number,
 	caf_account_charge_amount_in_cents: PropTypes.number,
 	total_in_cents: PropTypes.number,
 	order_rows: PropTypes.arrayOf(orderRowType),
 	destination_tag: PropTypes.string,
+	destination: destinationType,
 	status_code: PropTypes.number,
 })

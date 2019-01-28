@@ -1,5 +1,6 @@
 import React from 'react';
 import * as api from '../utils/api';
+import * as socket from '../utils/socket';
 
 class AuthChecker extends React.Component {
 	constructor(props) {
@@ -9,10 +10,26 @@ class AuthChecker extends React.Component {
 		}
 	}
 
+	 connectToQueue(token) {
+		if (!token || token === '') {
+			this.setState({statusMsg: "Some error happened. Pls try reloading."})
+			return
+		}
+		socket.initSocket(token)
+		.then(() => {
+			this.props.authCheckOK();
+		})
+		.catch(() => {
+			this.setState({statusMsg: "Cannot connect to the queue. Pls try reloading."})
+		});
+
+	}
+
 	componentDidMount() {
 		api.fetchUrl("/api/admin/my-info")
 		.then(response => {
-			this.props.authCheckOK();
+			this.setState({statusMsg: "Connecting to the queue ..."});
+			this.connectToQueue(response.data.socket_token);
 		})
 		.catch(err => {
 			if (err.response) {
