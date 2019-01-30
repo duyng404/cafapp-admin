@@ -9,11 +9,13 @@ class Queue extends React.Component {
 		super(props);
 		this.extractData = this.extractData.bind(this);
 		this.commitQueue = this.commitQueue.bind(this);
+		this.updateQueue = this.updateQueue.bind(this);
 		this.state = {
 			q: [],
 		}
 	}
 
+	// filter out the orders for queue, prep, shipping and delivered to pass into the components
 	extractData(filter) {
 		switch (filter) {
 			case "queue":
@@ -21,18 +23,46 @@ class Queue extends React.Component {
 					v.status_code === types.OrderStatusQueued ||
 					v.status_code === types.OrderStatusRequeued ||
 					v.status_code === types.OrderStatusPlaced);
+			case "prep":
+				return this.state.q.filter(v =>
+					v.status_code === types.OrderStatusPrepping);
+			case "ship":
+				return this.state.q.filter(v =>
+					v.status_code === types.OrderStatusShipping);
+			case "delivered":
+				return this.state.q.filter(v =>
+					v.status_code === types.OrderStatusDelivered);
 			default:
 				return [];
 		}
 	}
 
+	// go through the list of new orders, and update the state
+	updateQueue(newOrders) {
+		if (newOrders === undefined || !Array.isArray(newOrders) || newOrders.length === 0) return;
+		let q = [...this.state.q];
+		for (let order of newOrders) {
+			q = q.map(oldorder => {
+				if (order.id === oldorder.id) {
+					return order;
+				} else {
+					return oldorder;
+				}
+			});
+		}
+		this.setState({q});
+	}
+
+	// move orders from "queued" to "prepping"
 	commitQueue(q) {
+		console.log("committing queue:", q);
 		socket.commitQueue(q)
-		.then(() => {
-
+		.then((response) => {
+			console.log("queue commit success!");
+			this.updateQueue(response);
 		})
-		.catch(() => {
-
+		.catch((err) => {
+			console.log(err);
 		});
 	}
 
@@ -53,7 +83,6 @@ class Queue extends React.Component {
 	}
 
 	render() {
-		const { q } = this.state;
 		return (
 			<div className="container-fluid mt-5">
 				<h2 className="text-center">Queue</h2>
@@ -66,13 +95,25 @@ class Queue extends React.Component {
 							commitAction={this.commitQueue}
 						/>
 					</div>
-					<div className="col-12 col-xl-6">
-						{/* <FlipMove>
-							<div className="card" key="order0">cardd</div>
-							<div className="alert alert-primary" key="order1">one</div>
-							<div className="alert alert-primary" key="order2">two</div>
-							<div className="alert alert-primary" key="order3">three</div>
-						</FlipMove> */}
+					<div className="col-12 col-xl-6 mt-4">
+						<QueueList
+							data={this.extractData("prep")}
+							name="prepping"
+							commitAction={console.log}
+						/>
+					</div>
+					<div className="col-12 col-xl-6 mt-4">
+						<QueueList
+							data={this.extractData("ship")}
+							name="shipping"
+							commitAction={console.log}
+						/>
+					</div>
+					<div className="col-12 col-xl-6 mt-4">
+						<QueueList
+							data={this.extractData("delivered")}
+							name="delivered"
+						/>
 					</div>
 				</div>
 

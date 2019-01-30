@@ -24,11 +24,10 @@ export function initSocket(token) {
 export function commitQueue(q) {
 	return new Promise((resolve, reject) => {
 		socket.emit('qfeed-commit-queue', q, function(response) {
-			console.log(response);
-			resolve();
+			resolve(response);
 		})
 		setTimeout(function() {
-			reject();
+			reject("something went wrong");
 		}, 5000);
 	});
 }

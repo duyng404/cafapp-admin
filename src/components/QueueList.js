@@ -58,7 +58,6 @@ class QueueList extends React.Component {
 
 	toggleNext(e) {
 		e.preventDefault();
-		console.log("sending selected order to socket: ", this.state.selected);
 		this.props.commitAction(this.state.selected);
 		this.toggleSelectAll(e, true);
 	}
@@ -91,7 +90,14 @@ class QueueList extends React.Component {
 							</div>
 						</div>
 					))}
+					{ this.props.data && this.props.data.length === 0 ?
+						<div className="list-group-item py-4" key="empty">
+							<div className="text-center font-weight-light text-black-50">nothing here</div>
+						</div>
+						: null
+					}
 				</FlipMove>
+				{ this.props.commitAction && this.props.data && this.props.data.length > 0 ?
 				<div className="d-flex justify-content-end mt-2">
 					<button className="btn btn-link mx-2 ca-no-underline" type="button" onClick={this.toggleSelectAll}>
 						<i className="fa fa-square-o" aria-hidden="true"></i>
@@ -99,8 +105,8 @@ class QueueList extends React.Component {
 						<i className="fa fa-check-square-o" aria-hidden="true"></i>
 					</button>
 					<button className="btn btn-primary" disabled={this.state.selected.length === 0} onClick={this.toggleNext}>Next</button>
-
 				</div>
+				: null }
 			</>
 		);
 	}
