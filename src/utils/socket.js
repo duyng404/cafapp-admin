@@ -23,38 +23,21 @@ export function initSocket(token) {
 }
 
 export function commitQueue(q) {
-	return new Promise((resolve, reject) => {
-		socket.emit('qfeed-commit-queue', q, function(response) {
-			resolve(response);
-		})
-		setTimeout(function() {
-			reject("something went wrong");
-		}, 5000);
-	});
+	socket.emit('qfeed-commit-queue', q)
 }
 
 export function commitPrep(q) {
-	return new Promise((resolve, reject) => {
-		socket.emit('qfeed-commit-prep', q, function(response) {
-			resolve(response);
-		})
-		setTimeout(function() {
-			reject("something went wrong");
-		}, 5000);
-	});
+	socket.emit('qfeed-commit-prep', q)
 }
 
 export function commitShip(q) {
-	return new Promise((resolve, reject) => {
-		socket.emit('qfeed-commit-ship', q, function(response) {
-			resolve(response);
-		})
-		setTimeout(function() {
-			reject("something went wrong");
-		}, 5000);
-	});
+	socket.emit('qfeed-commit-ship', q)
 }
 
 export function onNewOrder(cb) {
 	socket.on('qfeed-new-order', order => cb(order));
+}
+
+export function onQueueUpdate(cb) {
+	socket.on('qfeed-update-queue', orders => cb(orders));
 }
