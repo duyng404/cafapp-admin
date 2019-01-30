@@ -59,38 +59,17 @@ class Queue extends React.Component {
 	// move orders from "queued" to "prepping"
 	commitQueue(q) {
 		console.log("committing queue:", q);
-		socket.commitQueue(q)
-		.then((response) => {
-			console.log("queue commit success!");
-			this.updateQueue(response);
-		})
-		.catch((err) => {
-			console.log(err);
-		});
+		socket.commitQueue(q);
 	}
 
 	commitPrep(q) {
 		console.log("committing prep:", q);
-		socket.commitPrep(q)
-		.then((response) => {
-			console.log("prep commit success!");
-			this.updateQueue(response);
-		})
-		.catch((err) => {
-			console.log(err);
-		});
+		socket.commitPrep(q);
 	}
 
 	commitShip(q) {
 		console.log("committing ship:", q);
-		socket.commitShip(q)
-		.then((response) => {
-			console.log("ship commit success!");
-			this.updateQueue(response);
-		})
-		.catch((err) => {
-			console.log(err);
-		});
+		socket.commitShip(q);
 	}
 
 	onNewOrder(order) {
@@ -114,6 +93,8 @@ class Queue extends React.Component {
 
 		// when we receive new order
 		socket.onNewOrder(this.onNewOrder)
+		// when the queue changes and we need to update
+		socket.onQueueUpdate(this.updateQueue)
 	}
 
 	render() {
