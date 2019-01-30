@@ -14,6 +14,7 @@ export function initSocket(token) {
 				if (response === "okbro") resolve()
 				else reject();
 			})
+			resolve()
 		})
 		socket.on('disconnect', function () {
 		    console.log('disconnected from server');
@@ -52,4 +53,8 @@ export function commitShip(q) {
 			reject("something went wrong");
 		}, 5000);
 	});
+}
+
+export function onNewOrder(cb) {
+	socket.on('qfeed-new-order', order => cb(order));
 }

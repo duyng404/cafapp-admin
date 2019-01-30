@@ -12,6 +12,7 @@ class Queue extends React.Component {
 		this.commitPrep = this.commitPrep.bind(this);
 		this.commitShip = this.commitShip.bind(this);
 		this.updateQueue = this.updateQueue.bind(this);
+		this.onNewOrder = this.onNewOrder.bind(this);
 		this.state = {
 			q: [],
 		}
@@ -92,6 +93,10 @@ class Queue extends React.Component {
 		});
 	}
 
+	onNewOrder(order) {
+		this.setState(prevState => ({q: [...prevState.q, order]}))
+	}
+
 	componentDidMount() {
 		// fetch the current queue
 		api.fetchUrl("/api/admin/view-queue")
@@ -106,6 +111,9 @@ class Queue extends React.Component {
 		.catch(err => {
 			console.log(err);
 		})
+
+		// when we receive new order
+		socket.onNewOrder(this.onNewOrder)
 	}
 
 	render() {
