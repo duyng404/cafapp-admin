@@ -9,6 +9,8 @@ class Queue extends React.Component {
 		super(props);
 		this.extractData = this.extractData.bind(this);
 		this.commitQueue = this.commitQueue.bind(this);
+		this.commitPrep = this.commitPrep.bind(this);
+		this.commitShip = this.commitShip.bind(this);
 		this.updateQueue = this.updateQueue.bind(this);
 		this.state = {
 			q: [],
@@ -66,6 +68,30 @@ class Queue extends React.Component {
 		});
 	}
 
+	commitPrep(q) {
+		console.log("committing prep:", q);
+		socket.commitPrep(q)
+		.then((response) => {
+			console.log("prep commit success!");
+			this.updateQueue(response);
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+	}
+
+	commitShip(q) {
+		console.log("committing ship:", q);
+		socket.commitShip(q)
+		.then((response) => {
+			console.log("ship commit success!");
+			this.updateQueue(response);
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+	}
+
 	componentDidMount() {
 		// fetch the current queue
 		api.fetchUrl("/api/admin/view-queue")
@@ -88,7 +114,7 @@ class Queue extends React.Component {
 				<h2 className="text-center">Queue</h2>
 
 				<div className="row">
-					<div className="col-12 col-xl-6">
+					<div className="col-12 col-xl-6 mt-4">
 						<QueueList
 							data={this.extractData("queue")}
 							name="queued"
@@ -99,14 +125,14 @@ class Queue extends React.Component {
 						<QueueList
 							data={this.extractData("prep")}
 							name="prepping"
-							commitAction={console.log}
+							commitAction={this.commitPrep}
 						/>
 					</div>
 					<div className="col-12 col-xl-6 mt-4">
 						<QueueList
 							data={this.extractData("ship")}
 							name="shipping"
-							commitAction={console.log}
+							commitAction={this.commitShip}
 						/>
 					</div>
 					<div className="col-12 col-xl-6 mt-4">

@@ -31,3 +31,25 @@ export function commitQueue(q) {
 		}, 5000);
 	});
 }
+
+export function commitPrep(q) {
+	return new Promise((resolve, reject) => {
+		socket.emit('qfeed-commit-prep', q, function(response) {
+			resolve(response);
+		})
+		setTimeout(function() {
+			reject("something went wrong");
+		}, 5000);
+	});
+}
+
+export function commitShip(q) {
+	return new Promise((resolve, reject) => {
+		socket.emit('qfeed-commit-ship', q, function(response) {
+			resolve(response);
+		})
+		setTimeout(function() {
+			reject("something went wrong");
+		}, 5000);
+	});
+}
