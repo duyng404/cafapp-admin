@@ -22,7 +22,7 @@ class TopBar extends React.Component{
 							<NavLink to="/users" className="nav-link" activeClassName="active">Users</NavLink>
 						</li>
 						<li className="nav-item">
-							<NavLink to="/generate" className="nav-link" activeClassName="active">Generate</NavLink>
+							<NavLink to="/redeemables" className="nav-link" activeClassName="active">Redeemables</NavLink>
 						</li>
 					</ul>
 				</div>

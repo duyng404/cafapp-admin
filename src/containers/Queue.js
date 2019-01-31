@@ -99,7 +99,7 @@ class Queue extends React.Component {
 
 	render() {
 		return (
-			<div className="container-fluid mt-5">
+			<div className="mt-5">
 				<h2 className="text-center">Queue</h2>
 
 				<div className="row">
