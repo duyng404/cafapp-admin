@@ -80,7 +80,6 @@ class Queue extends React.Component {
 		// fetch the current queue
 		api.fetchUrl("/api/admin/view-queue")
 		.then(response => {
-			this.extractData(response.data);
 			if (!response.data || !Array.isArray(response.data) || response.data.length === 0) {
 				this.setState({q:[]});
 				return;
@@ -99,7 +98,7 @@ class Queue extends React.Component {
 
 	render() {
 		return (
-			<div className="container-fluid mt-5">
+			<div className="mt-5">
 				<h2 className="text-center">Queue</h2>
 
 				<div className="row">
