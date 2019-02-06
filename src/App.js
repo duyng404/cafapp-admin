@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import TopBar from './components/TopBar';
 import AuthChecker from './components/AuthChecker';
 import Queue from './containers/Queue';
+import Redeemables from './containers/Redeemables';
 import './App.css';
 
 class App extends React.Component {
@@ -28,6 +29,7 @@ class App extends React.Component {
 						<div className="container-fluid">
 							<Route exact path="/" component={Queue} />
 							<Route path="/orders" component={Orders} />
+							<Route path="/redeemables" component={Redeemables} />
 						</div>
 					</>
 			}

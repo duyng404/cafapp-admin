@@ -9,11 +9,8 @@ class TopBar extends React.Component{
 					<img src={process.env.PUBLIC_URL + '/favicon.png'} width="30" height="30" className="d-inline-block align-top" alt="" />
 					<span className="ca-logo-text text-ca-yellow4"><strong>&nbsp;CafApp Admin</strong></span>
 				</Link>
-				<button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMainContent" aria-controls="navbarMainContent" aria-expanded="false" aria-label="Toggle navigation">
-					<span className="navbar-toggler-icon"></span>
-				</button>
 
-				<div className="collapse navbar-collapse in" id="navbarMainContent">
+				<div className="navbar-collapse" id="navbarMainContent">
 					<ul className="navbar-nav mr-auto">
 						<li className="nav-item">
 							<NavLink exact to="/" className="nav-link" activeClassName="active">Queue</NavLink>
@@ -24,9 +21,12 @@ class TopBar extends React.Component{
 						<li className="nav-item">
 							<NavLink to="/users" className="nav-link" activeClassName="active">Users</NavLink>
 						</li>
+						<li className="nav-item">
+							<NavLink to="/redeemables" className="nav-link" activeClassName="active">Redeemables</NavLink>
+						</li>
 					</ul>
 				</div>
-				<a className="nav-link text-danger" href={`${process.env.REACT_APP_BACKEND_URL}/logout`}>Logout</a>
+				<a className="nav-item text-danger pr-4" href={`${process.env.REACT_APP_BACKEND_URL}/logout`}>Logout</a>
 			</nav>
 
 		);
