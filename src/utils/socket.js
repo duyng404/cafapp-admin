@@ -4,7 +4,7 @@ let socket;
 
 export function initSocket(token) {
 	return new Promise((resolve, reject) => {
-		socket = io('http://localhost:7000', {
+		socket = io(process.env.REACT_APP_BACKEND_URL, {
 			"path": "/socket/",
 			"reconnectionAttempts":"20",
 			"reconnectionDelay":"5000",
