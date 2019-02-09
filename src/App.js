@@ -9,13 +9,17 @@ import './App.css';
 class App extends React.Component {
 	constructor(props) {
 		super(props);
+		this.authCheckOK = this.authCheckOK.bind(this);
 		this.state = {
 			isLoggedIn: false,
 		};
 	}
 
 	authCheckOK = () => {
-		this.setState({isLoggedIn: true});
+		this.setState({
+			isLoggedIn: true,
+		});
+
 	}
 
   render() {
