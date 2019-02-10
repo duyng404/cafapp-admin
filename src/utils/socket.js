@@ -64,7 +64,16 @@ export function initSocket() {
 }
 
 export function commitQueue(q) {
-	socket.emit('qfeed-commit-queue', q)
+	socket.emit('qfeed-commit-queue', q, function(response) {
+		if (response === 'okbro') {
+			console.log('okbro received')
+			return
+		} else {
+			console.log('no okbro?');
+			onConnectErrorFunc('error');
+			setTimeout(() => {socket.open()},2000);
+		}
+	})
 }
 
 export function commitPrep(q) {
