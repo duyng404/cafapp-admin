@@ -2,13 +2,13 @@ import React from 'react';
 
 class UserTable extends React.Component {
     renderUser(dataList) {
-        const data = dataList.map((user) => {
+        const data = dataList.map((user,id) => {
             return (
                 <tr>
-                    <th scope="row">{user.id}</th>
+                    <th scope="row">{id + 1}</th>
                     <td>{user.full_name}</td>
                     <td>{user.gus_username}</td>
-                    <td>3</td>
+                    <td>{user.total_orders}</td>
                     <td><button type="button" class="btn btn-link">View details</button></td>
                 </tr>
             );

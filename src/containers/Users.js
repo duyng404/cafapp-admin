@@ -11,22 +11,13 @@ class Users extends React.Component {
 	componentDidMount() {
 		api.fetchUrl(`${process.env.REACT_APP_BACKEND_URL}/api/admin/view-users`)
 			.then(res => {
-				this.setState({ usersData: res.data.users });
+				this.setState({ usersData: res.data });
 				console.log(this.state.usersData);
 				return;
 			})
 			.catch(err => {
 				console.log(err);
 			});
-		api.fetchUrl(`${process.env.REACT_APP_BACKEND_URL}/api/admin/get-total-orders`)
-		.then(res => {
-			//get the number from response object
-			const totalOrders = res.totalOrders;
-			console.log(totalOrders);
-		})
-		.catch(err => {
-			console.log(err);
-		});
 	}
 	render() {
 		return (
