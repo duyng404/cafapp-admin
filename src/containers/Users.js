@@ -1,9 +1,36 @@
 import React from 'react';
-
+import * as api from '../utils/api';
+import UserTable from '../components/UserTable';
 class Users extends React.Component {
-    render() {
-        return (
-            <div>
+	constructor(props) {
+		super(props);
+		this.state = {
+			usersData: []
+		}
+	}
+	componentDidMount() {
+		api.fetchUrl(`${process.env.REACT_APP_BACKEND_URL}/api/admin/view-users`)
+			.then(res => {
+				this.setState({ usersData: res.data.users });
+				console.log(this.state.usersData);
+				return;
+			})
+			.catch(err => {
+				console.log(err);
+			});
+		api.fetchUrl(`${process.env.REACT_APP_BACKEND_URL}/api/admin/get-total-orders`)
+		.then(res => {
+			//get the number from response object
+			const totalOrders = res.totalOrders;
+			console.log(totalOrders);
+		})
+		.catch(err => {
+			console.log(err);
+		});
+	}
+	render() {
+		return (
+			<div>
 				<div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 					<h1 className="h2 font-weight-bold">Users Management</h1>
 					<div>abcxyz</div>
@@ -22,7 +49,7 @@ class Users extends React.Component {
 									<input type="text" className="form-control" placeholder="eg. jsmith3" name="filter-gususername" id="filter-gususername" />
 								</div>
 								<div className="col-4">
-									<label for="filter-sort">Sort By</label>
+									<label htmlFor="filter-sort">Sort By</label>
 									<select className="form-control" id="filter-sort">
 										<option value="title">ID ascending</option>
 										<option value="titleR">ID descending</option>
@@ -43,45 +70,19 @@ class Users extends React.Component {
 				<div className="my-4"></div>
 
 				<h3>Search results</h3>
-
-                <table className="table table-hover">
-                    <thead className="">
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Full Name</th>
-                            <th scope="col">Gus Username</th>
-                            <th scope="col">Total Orders</th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody className="">
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>3</td>
-                            <td><button type="button" class="btn btn-link">View details</button></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>5</td>
-                            <td><button type="button" class="btn btn-link">View details</button></td>
-                        </tr>
-                    </tbody>
-				</table>
-
-				{/* <p className="text-muted">No results</p> */}
-
+				{this.state.usersData.length !== 0 ?
+					<UserTable data={this.state.usersData} />
+					 : 
+					 <p className="text-muted">No results</p>
+				}
 				<div className="my-4"></div>
 
 				<h3>User Details</h3>
 
 				<p className="text-muted">No user selected</p>
-            </div>
-        );
-    }
+			</div>
+		);
+	}
 }
 
 export default Users;
