@@ -5,17 +5,40 @@ import * as api from '../utils/api';
 class Generate extends React.Component {
 	constructor(props) {
 		super(props);
-		this.generateFiveCodes = this.generateFiveCodes.bind(this);
+		this.generateCodes = this.generateCodes.bind(this);
+		this.amountRef = React.createRef();
+		this.reasonRef = React.createRef();
 		this.state = {
+			inputError: "",
 			availableCodes: [],
 			redeemedCodes: [],
 			newCodes: [],
 		};
 	}
 
-	generateFiveCodes(e) {
+	generateCodes(e) {
 		e.preventDefault();
-		api.postUrl("/api/admin/generate-five-codes")
+		this.setState({ inputError: "" });
+
+		const amount = parseInt(this.amountRef.current.value, 10);
+		const reason = this.reasonRef.current.value;
+
+		// check
+		if (isNaN(amount) || amount === 0) {
+			this.setState({ inputError: "missing amount" });
+			return
+		}
+		if (reason === "") {
+			this.setState({ inputError: "missing reason" });
+			return
+		}
+
+		// send request
+		const data = {
+			amount: amount,
+			reason: reason
+		}
+		api.postUrl("/api/admin/generate-redeemable-codes", data)
 		.then(response => {
 			if (!response.data || !Array.isArray(response.data) || response.data.length === 0) {
 				this.setState({
@@ -60,7 +83,23 @@ class Generate extends React.Component {
 					<h2 className="font-weight-bold">Generate Redeemable Codes</h2>
 					<div className="my-4"></div>
 					<p className="lead">Click the button below to generate five redeemable codes. Remember to write them down afterwards.</p>
-					<button className="btn btn-primary btn-lg" type="button" onClick={this.generateFiveCodes}>Generate 5 Redeemable Codes</button>
+					<div className="row">
+						<div className="col-12 col-md-3">
+							<label htmlFor="amount">&#35; of codes</label>
+							<input className="form-control" type="number" id="amount" name="amount" placeholder="max 50" ref={this.amountRef}></input>
+						</div>
+
+						<div className="col-12 col-md">
+							<label htmlFor="reason">Reason</label>
+							<input className="form-control" type="text" id="reason" name="reason" placeholder="" ref={this.reasonRef}></input>
+						</div>
+
+						<div className="col-12 col-md-5">
+							<label className="text-white" htmlFor="genbutton">.</label>
+							<button className="form-control btn btn-primary" type="button" onClick={this.generateCodes} id="genbutton" name="genbutton">Generate 5 Redeemable Codes</button>
+						</div>
+					</div>
+					<p className="text-danger">{this.state.inputError}</p>
 				</section>
 
 				<section className="container mt-5 text-center">
@@ -73,11 +112,12 @@ class Generate extends React.Component {
 
 				<section className="container text-center">
 					<h2 className="font-weight-bold">Available Codes</h2>
-					<table class="table table-responsive-md">
+					<table className="table table-responsive-md">
 						<thead>
 							<tr>
 								<th scope="col">#</th>
 								<th scope="col">Generated</th>
+								<th scope="col">Reason</th>
 								<th scope="col">Amount</th>
 								<th scope="col">Status</th>
 							</tr>
@@ -87,6 +127,7 @@ class Generate extends React.Component {
 								<tr>
 									<th scope="row">{code.code}</th>
 									<td>{Moment(code.created_at).format("MMM Y h:mmA")}</td>
+									<td>{code.reason}</td>
 									<td>$10</td>
 									<td className="text-success">Available</td>
 								</tr>
@@ -99,7 +140,7 @@ class Generate extends React.Component {
 
 				<section className="container mt-5 text-center">
 					<h2 className="font-weight-bold">Redeemed Codes</h2>
-					<table class="table table-responsive-md">
+					<table className="table table-responsive-md">
 						<thead>
 							<tr>
 								<th scope="col">#</th>
