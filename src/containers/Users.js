@@ -9,6 +9,7 @@ class Users extends React.Component {
 		}
 	}
 	componentDidMount() {
+		//get all users' data
 		api.fetchUrl(`${process.env.REACT_APP_BACKEND_URL}/api/admin/view-users`)
 			.then(res => {
 				this.setState({ usersData: res.data });
@@ -68,9 +69,6 @@ class Users extends React.Component {
 				}
 				<div className="my-4"></div>
 
-				<h3>User Details</h3>
-
-				<p className="text-muted">No user selected</p>
 			</div>
 		);
 	}
