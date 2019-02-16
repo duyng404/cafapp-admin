@@ -39,7 +39,7 @@ class UserInfo extends React.Component {
                     <td>{this.formatDate(order.created_at)}</td>
                     <td>${order.total_in_cents/100}</td>
                     <td>{order.status_code}</td>
-                    <td><a href>View details</a></td>
+                    <td><button className="btn btn-link">View details</button></td>
                 </tr>
             );
         });
