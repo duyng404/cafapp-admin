@@ -1,19 +1,30 @@
 import React from 'react';
 import * as api from '../utils/api';
 import UserTable from '../components/UserTable';
+import UserInfo from '../components/UserInfo';
 class Users extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			usersData: []
+			usersData: [],
+			userInfo: {}
 		}
+		this.handleViewDetailsUser = this.handleViewDetailsUser.bind(this);
 	}
+	handleViewDetailsUser(e){
+        //get data of one particular user
+        api.fetchUrl(`${process.env.REACT_APP_BACKEND_URL}/api/admin/view-users/${e.target.value}`)
+        .then(res => {
+            res.data.userInfo.allOrders = res.data.allOrders;
+            this.setState({userInfo: res.data.userInfo})
+            return
+        });
+    }
 	componentDidMount() {
 		//get all users' data
 		api.fetchUrl(`${process.env.REACT_APP_BACKEND_URL}/api/admin/view-users`)
 			.then(res => {
 				this.setState({ usersData: res.data });
-				console.log(this.state.usersData);
 				return;
 			})
 			.catch(err => {
@@ -63,12 +74,17 @@ class Users extends React.Component {
 
 				<h3>Search results</h3>
 				{this.state.usersData.length !== 0 ?
-					<UserTable data={this.state.usersData} />
+					<UserTable viewUserDetail={this.handleViewDetailsUser} data={this.state.usersData} />
 					 : 
 					 <p className="text-muted">No results</p>
 				}
 				<div className="my-4"></div>
-
+				<h3 className="font-weight-bold">User Details</h3>
+                {Object.keys(this.state.userInfo).length !== 0 ? 
+                    <UserInfo user={this.state.userInfo} />
+                    :
+                    <p className="text-muted">No user selected</p>
+                }
 			</div>
 		);
 	}

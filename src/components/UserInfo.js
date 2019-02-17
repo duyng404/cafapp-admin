@@ -1,34 +1,9 @@
 import React from 'react';
-
+import Moment from 'moment';
 class UserInfo extends React.Component {
     formatDate(dateStr){
         //jan 22 8:00pm
-        let returnStr = "";
-        const dateObj = {
-            "01": "Jan",
-            "02": "Feb",
-            "03": "Mar",
-            "04": "Apr",
-            "05": "May",
-            "06": "Jun",
-            "07": "Jul",
-            "08": "Aug",
-            "09": "Sep",
-            "10": "Oct",
-            "11": "Nov",
-            "12": "Dec"
-        };
-        //format date
-        const listDate = dateStr.split("T");
-        const date = listDate[0].split("-");
-        date.shift();
-        date[0] = dateObj[date[0]];
-        returnStr = date.join(" ");
-        //format tiem
-        const time = listDate[1].split(":");
-        time.pop();
-        returnStr = returnStr.concat(" ").concat(time.join(":"));
-        return returnStr;
+        return Moment(dateStr).format("MMM D h:mmA");
     }
     renderOrders(orders) {
         const data = orders.map((order) => {
