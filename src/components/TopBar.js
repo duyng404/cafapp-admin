@@ -26,7 +26,7 @@ class TopBar extends React.Component{
 						</li>
 					</ul>
 				</div>
-				<a className="nav-item text-danger pr-4" href={`${process.env.REACT_APP_BACKEND_URL}/logout`}>Logout</a>
+				<a className="nav-item text-danger pr-4 my-2" href={`${process.env.REACT_APP_BACKEND_URL}/logout`}>Logout</a>
 			</nav>
 
 		);
