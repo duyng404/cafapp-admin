@@ -8,7 +8,7 @@ class UserInfo extends React.Component {
     renderOrders(orders) {
         const data = orders.map((order) => {
             return (
-                <tr>
+                <tr key = {order.id}>
                     <td>{order.id}</td>
                     <td>{order.destination.name}</td>
                     <td>{this.formatDate(order.created_at)}</td>
@@ -24,16 +24,16 @@ class UserInfo extends React.Component {
         const data = this.props.user;
         return (
             <div>
-                <div className="user-info text-center">
+                <div className="user-info">
                     <div>
                         <p>Fullname: {data.full_name}</p>
                         <p>Gus Username: {data.gus_username}</p>
                         <p>Gus ID: {data.gus_id}</p>
                     </div>
                 </div>
-                <h3 className="font-weight-bold">Order Details</h3>
+                <h3>Past orders by</h3>
                 {data.allOrders.length !== 0 ?
-                    <table class="table table-hover">
+                    <table className="table table-hover">
                         <thead>
                             <tr>
                                 <th>#</th>
