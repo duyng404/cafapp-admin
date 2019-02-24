@@ -1,15 +1,15 @@
 import React from 'react';
-import * as api from '../utils/api';
+
 class UserTable extends React.Component {
     renderUser(dataList) {
-        const data = dataList.map((user) => {
+        const data = dataList.map((user,id) => {
             return (
-                <tr>
+                <tr key = {id}>
                     <th scope="row">{user.user_id}</th>
                     <td>{user.full_name}</td>
                     <td>{user.gus_username}</td>
                     <td>{user.total_orders}</td>
-                    <td><button value={user.user_id} type="button" onClick={this.props.viewUserDetail} class="btn btn-link">View details</button></td>
+                    <td><button value={user.user_id} type="button" onClick={this.props.viewUserDetail} className="btn btn-link">View details</button></td>
                 </tr>
             );
         });

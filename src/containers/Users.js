@@ -7,19 +7,50 @@ class Users extends React.Component {
 		super(props);
 		this.state = {
 			usersData: [],
-			userInfo: {}
+			userInfo: {},
+			fullname: "",
+			gususername: "",
+			sortBy: "id"
 		}
 		this.handleViewDetailsUser = this.handleViewDetailsUser.bind(this);
+		this.handleFormChange = this.handleFormChange.bind(this);
+		this.handleFormSubmit = this.handleFormSubmit.bind(this);
 	}
-	handleViewDetailsUser(e){
-        //get data of one particular user
-        api.fetchUrl(`${process.env.REACT_APP_BACKEND_URL}/api/admin/view-users/${e.target.value}`)
-        .then(res => {
-            res.data.userInfo.allOrders = res.data.allOrders;
-            this.setState({userInfo: res.data.userInfo})
-            return
-        });
-    }
+
+	handleFormChange(e) {
+		const name = e.target.name;
+		this.setState({ [name]: e.target.value });
+	}
+
+	handleFormSubmit(e) {
+		e.preventDefault();
+		let endPts = [];
+		Object.keys(this.state).forEach((key) => {
+			if (key !== "" && key !== "usersData" && key !== "userInfo") {
+				endPts.push(`${key}=${this.state[key]}`);
+			}
+		});
+		const url = `${process.env.REACT_APP_BACKEND_URL}/api/admin/view-users?${endPts.join("&")}`;
+		console.log(url);
+		api.fetchUrl(url)
+		.then(res => {
+			console.log(res);
+			this.setState({ usersData: res.data });
+			return;
+		})
+		.catch(err => {
+			console.log(err);
+		});
+	}
+	handleViewDetailsUser(e) {
+		//get data of one particular user
+		api.fetchUrl(`${process.env.REACT_APP_BACKEND_URL}/api/admin/view-users/${e.target.value}`)
+			.then(res => {
+				res.data.userInfo.allOrders = res.data.allOrders;
+				this.setState({ userInfo: res.data.userInfo })
+				return
+			});
+	}
 	componentDidMount() {
 		//get all users' data
 		api.fetchUrl(`${process.env.REACT_APP_BACKEND_URL}/api/admin/view-users`)
@@ -41,30 +72,30 @@ class Users extends React.Component {
 				<div className="card">
 					<div className="card-body">
 						<h3>Search filters</h3>
-						<form>
+						<form onSubmit={this.handleFormSubmit}>
 							<div className="form-row">
 								<div className="col-4">
 									<label htmlFor="filter-name">Full Name</label>
-									<input type="text" className="form-control" placeholder="eg. Jon Smith" name="filter-fullname" id="filter-fullname" />
+									<input onChange={this.handleFormChange} type="text" className="form-control" placeholder="eg. Jon Smith" name="fullname" id="fullname" value={this.state.fullname} />
 								</div>
 								<div className="col-4">
 									<label htmlFor="filter-name">Gus Username</label>
-									<input type="text" className="form-control" placeholder="eg. jsmith3" name="filter-gususername" id="filter-gususername" />
+									<input onChange={this.handleFormChange} type="text" className="form-control" placeholder="eg. jsmith3" name="gususername" id="gususername" value={this.state.gususername} />
 								</div>
 								<div className="col-4">
 									<label htmlFor="filter-sort">Sort By</label>
-									<select className="form-control" id="filter-sort">
-										<option value="title">ID ascending</option>
-										<option value="titleR">ID descending</option>
-										<option value="date">Full Name A-Z</option>
-										<option value="dateR">Full Name Z-A</option>
-										<option value="language">Gus Username A-Z</option>
-										<option value="languageR">Gus Username Z-A</option>
+									<select onChange={this.handleFormChange} name="sortBy" value={this.state.sortBy} className="form-control" id="filter-sort">
+										<option value="id">ID ascending</option>
+										<option value="idDESC">ID descending</option>
+										<option value="full_name">Full Name A-Z</option>
+										<option value="full_nameDESC">Full Name Z-A</option>
+										<option value="gus_username">Gus Username A-Z</option>
+										<option value="gus_usernameDESC">Gus Username Z-A</option>
 									</select>
 								</div>
 							</div>
 							<div className="d-flex justify-content-end mt-2">
-								<button className="btn btn-primary">Search</button>
+								<button className="btn btn-primary" type="submit">Search</button>
 							</div>
 						</form>
 					</div>
@@ -75,16 +106,16 @@ class Users extends React.Component {
 				<h3>Search results</h3>
 				{this.state.usersData.length !== 0 ?
 					<UserTable viewUserDetail={this.handleViewDetailsUser} data={this.state.usersData} />
-					 : 
-					 <p className="text-muted">No results</p>
+					:
+					<p className="text-muted">No results</p>
 				}
 				<div className="my-4"></div>
 				<h3 className="font-weight-bold">User Details</h3>
-                {Object.keys(this.state.userInfo).length !== 0 ? 
-                    <UserInfo user={this.state.userInfo} />
-                    :
-                    <p className="text-muted">No user selected</p>
-                }
+				{Object.keys(this.state.userInfo).length !== 0 ?
+					<UserInfo user={this.state.userInfo} />
+					:
+					<p className="text-muted">No user selected</p>
+				}
 			</div>
 		);
 	}
