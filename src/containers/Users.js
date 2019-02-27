@@ -1,5 +1,7 @@
 import React from 'react';
 import * as api from '../utils/api';
+import queryString from 'query-string';
+import PropTypes from 'prop-types';
 import UserTable from '../components/UserTable';
 import UserInfo from '../components/UserInfo';
 class Users extends React.Component {
@@ -17,6 +19,10 @@ class Users extends React.Component {
 		this.handleFormSubmit = this.handleFormSubmit.bind(this);
 	}
 
+	static contextTypes = {
+		router: PropTypes.object
+	}
+
 	handleFormChange(e) {
 		const name = e.target.name;
 		this.setState({ [name]: e.target.value });
@@ -24,6 +30,7 @@ class Users extends React.Component {
 
 	handleFormSubmit(e) {
 		e.preventDefault();
+		
 		let endPts = [];
 		Object.keys(this.state).forEach((key) => {
 			if (key !== "" && key !== "usersData" && key !== "userInfo") {
@@ -31,14 +38,15 @@ class Users extends React.Component {
 			}
 		});
 		const url = `${process.env.REACT_APP_BACKEND_URL}/api/admin/view-users?${endPts.join("&")}`;
+		this.context.router.history.push(`/users/${endPts.join("&")}`);
 		api.fetchUrl(url)
-		.then(res => {
-			this.setState({ usersData: res.data });
-			return;
-		})
-		.catch(err => {
-			console.log(err);
-		});
+			.then(res => {
+				this.setState({ usersData: res.data });
+				return;
+			})
+			.catch(err => {
+				console.log(err);
+			});
 	}
 	handleViewDetailsUser(e) {
 		//get data of one particular user
@@ -51,7 +59,11 @@ class Users extends React.Component {
 	}
 	componentDidMount() {
 		//get all users' data
-		api.fetchUrl(`${process.env.REACT_APP_BACKEND_URL}/api/admin/view-users`)
+		const value = queryString.parse(this.props.location.search);
+		api.fetchUrl(`${process.env.REACT_APP_BACKEND_URL}/api/admin/view-users
+		?fullname=${!value.fullname? "" : value.fullname}
+		&gususername=${!value.gususername? "" : value.gususername}
+		&sortBy=${!value.sortBy ? "" : value.sortBy}`)
 			.then(res => {
 				this.setState({ usersData: res.data });
 				return;
