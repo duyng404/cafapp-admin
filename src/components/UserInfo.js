@@ -31,7 +31,7 @@ class UserInfo extends React.Component {
                         <p>Gus ID: {data.gus_id}</p>
                     </div>
                 </div>
-                <h3>Past orders by</h3>
+                <h3>Past orders by {data.full_name}</h3>
                 {data.allOrders.length !== 0 ?
                     <table className="table table-hover">
                         <thead>

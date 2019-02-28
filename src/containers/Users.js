@@ -17,10 +17,27 @@ class Users extends React.Component {
 		this.handleViewDetailsUser = this.handleViewDetailsUser.bind(this);
 		this.handleFormChange = this.handleFormChange.bind(this);
 		this.handleFormSubmit = this.handleFormSubmit.bind(this);
+		this.buildQueryParams = this.buildQueryParams.bind(this);
+
+		// get all query params
+		const value = queryString.parse(this.props.location.search);
+		if (value.fullname && value.fullname !== "") this.state.fullname = value.fullname;
+		if (value.gususername && value.gususername !== "") this.state.gususername = value.gususername;
+		if (value.sortBy && value.sortBy !== "") this.state.sortBy = value.sortBy;
 	}
 
-	static contextTypes = {
-		router: PropTypes.object
+	// this helper function will build the query params part of the url and return it, using the state
+	buildQueryParams() {
+		const params = {
+			fullname: this.state.fullname,
+			gususername: this.state.gususername,
+			sortBy: this.state.sortBy,
+		};
+		// if param is their default value, remove it by setting it to undefined
+		if (params.fullname === "") params.fullname = undefined;
+		if (params.gususername === "") params.gususername = undefined;
+		if (params.sortBy === "id") params.sortBy = undefined;
+		return queryString.stringify(params);
 	}
 
 	handleFormChange(e) {
@@ -30,15 +47,9 @@ class Users extends React.Component {
 
 	handleFormSubmit(e) {
 		e.preventDefault();
-		
-		let endPts = [];
-		Object.keys(this.state).forEach((key) => {
-			if (key !== "" && key !== "usersData" && key !== "userInfo") {
-				endPts.push(`${key}=${this.state[key]}`);
-			}
-		});
-		const url = `${process.env.REACT_APP_BACKEND_URL}/api/admin/view-users?${endPts.join("&")}`;
-		this.context.router.history.push(`/users/${endPts.join("&")}`);
+		const params = this.buildQueryParams();
+		const url = `${process.env.REACT_APP_BACKEND_URL}/api/admin/view-users?${params}`;
+		this.props.history.push(`/users?${params}`);
 		api.fetchUrl(url)
 			.then(res => {
 				this.setState({ usersData: res.data });
@@ -48,6 +59,7 @@ class Users extends React.Component {
 				console.log(err);
 			});
 	}
+
 	handleViewDetailsUser(e) {
 		//get data of one particular user
 		api.fetchUrl(`${process.env.REACT_APP_BACKEND_URL}/api/admin/view-users/${e.target.value}`)
@@ -55,15 +67,16 @@ class Users extends React.Component {
 				res.data.userInfo.allOrders = res.data.allOrders;
 				this.setState({ userInfo: res.data.userInfo })
 				return
+			})
+			.catch(err => {
+				console.log(err);
 			});
 	}
+
 	componentDidMount() {
-		//get all users' data
-		const value = queryString.parse(this.props.location.search);
-		api.fetchUrl(`${process.env.REACT_APP_BACKEND_URL}/api/admin/view-users
-		?fullname=${!value.fullname? "" : value.fullname}
-		&gususername=${!value.gususername? "" : value.gususername}
-		&sortBy=${!value.sortBy ? "" : value.sortBy}`)
+		// do a get request
+		const params = this.buildQueryParams();
+		api.fetchUrl(`${process.env.REACT_APP_BACKEND_URL}/api/admin/view-users?${params}`)
 			.then(res => {
 				this.setState({ usersData: res.data });
 				return;
@@ -72,12 +85,13 @@ class Users extends React.Component {
 				console.log(err);
 			});
 	}
+
 	render() {
 		return (
 			<div>
 				<div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 					<h1 className="h2 font-weight-bold">Users Management</h1>
-					<div>abcxyz</div>
+					{/* <div>abcxyz</div> */}
 				</div>
 				<div className="card">
 					<div className="card-body">
