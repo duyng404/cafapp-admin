@@ -4,6 +4,7 @@ import TopBar from './components/TopBar';
 import AuthChecker from './components/AuthChecker';
 import Queue from './containers/Queue';
 import Redeemables from './containers/Redeemables';
+import Users from './containers/Users';
 import './App.css';
 
 class App extends React.Component {
@@ -34,6 +35,7 @@ class App extends React.Component {
 							<Route exact path="/" component={Queue} />
 							<Route path="/orders" component={Orders} />
 							<Route path="/redeemables" component={Redeemables} />
+							<Route path="/users" component={Users} />
 						</div>
 					</>
 			}
