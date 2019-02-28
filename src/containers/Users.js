@@ -1,7 +1,6 @@
 import React from 'react';
 import * as api from '../utils/api';
 import queryString from 'query-string';
-import PropTypes from 'prop-types';
 import UserTable from '../components/UserTable';
 import UserInfo from '../components/UserInfo';
 class Users extends React.Component {
