@@ -126,7 +126,7 @@ class Generate extends React.Component {
 							{ this.state.availableCodes.map(code => (
 								<tr>
 									<th scope="row">{code.code}</th>
-									<td>{Moment(code.created_at).format("MMM Y h:mmA")}</td>
+									<td>{Moment(code.created_at).format("MMM D h:mmA")}</td>
 									<td>{code.reason}</td>
 									<td>$10</td>
 									<td className="text-success">Available</td>
@@ -155,8 +155,8 @@ class Generate extends React.Component {
 							{ this.state.redeemedCodes.map(code => (
 								<tr>
 									<th scope="row">{code.code}</th>
-									<td>{Moment(code.created_at).format("MMM Y h:mmA")}</td>
-									<td>{Moment(code.redeemed_at).format("MMM Y h:mmA")}</td>
+									<td>{Moment(code.created_at).format("MMM D h:mmA")}</td>
+									<td>{Moment(code.redeemed_at).format("MMM D h:mmA")}</td>
 									<td>{code.redeemed_by_user.gus_username}</td>
 									<td>$10</td>
 									<td className="text-danger">Redeemed</td>
