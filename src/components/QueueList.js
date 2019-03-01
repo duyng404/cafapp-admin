@@ -10,6 +10,7 @@ class QueueList extends React.Component {
 		this.toggleSelectAll = this.toggleSelectAll.bind(this);
 		this.toggleSelect = this.toggleSelect.bind(this);
 		this.toggleNext = this.toggleNext.bind(this);
+		this.toggleCollapse = this.toggleCollapse.bind(this);
 		this.state = {
 			selected: [],
 			collapsed: false,
@@ -33,11 +34,12 @@ class QueueList extends React.Component {
 
 	getTimeFromOrder(order) {
 		const t = order.created_at;
-		// if less than 20 mins ago, display in words
-		if (Moment().unix() - Moment(t).unix() < 1200) {
-			return Moment(t).fromNow();
+		const today = Moment();
+		// if today, display in short form
+		if (today.isSame(t, 'd')) {
+			return Moment(t).format("h:mmA");
 		}
-		return Moment(t).format("h:mmA");
+		return Moment(t).format("MMM D h:mmA");
 	}
 
 	toggleSelect(id) {
@@ -58,6 +60,12 @@ class QueueList extends React.Component {
 		}
 	}
 
+	toggleCollapse(e) {
+		e.preventDefault();
+		console.log(this.state.collapsed);
+		this.setState( prevState => ({ collapsed: !prevState.collapsed }) );
+	}
+
 	toggleNext(e) {
 		e.preventDefault();
 		this.props.commitAction(this.state.selected);
@@ -67,31 +75,42 @@ class QueueList extends React.Component {
 	render () {
 		return (
 			<>
-				<h4 className="text-center">{ this.props.name }</h4>
+				<div className="d-flex justify-content-between">
+					<div className="text-muted">total: { this.props.data.length }</div>
+					<div className="h4">{ this.props.name }</div>
+					<button className="btn btn-sm btn-link" type="button" onClick={this.toggleCollapse}>Hide</button>
+				</div>
+				{/* <h4 className="text-center">
+					{ this.props.name }
+				</h4> */}
 				<FlipMove className="list-group" enterAnimation="fade" leaveAnimation="fade">
-					{ this.props.data.map(v => (
+					{ !this.state.collapsed ?
+					this.props.data.map(v => (
 						<div className={`list-group-item py-0 ${this.state.selected.includes(v.id) ? 'bg-light' : ''}`} key={v.tag}>
-							<div className="row align-items-center ca-queue-row" onClick={() => this.toggleSelect(v.id)}>
+							<div className="d-flex justify-content-around align-items-center ca-queue-row" onClick={() => this.toggleSelect(v.id)}>
 
 									{ this.state.selected.includes(v.id) ?
-									<div className="col-1 ca-checkbox ca-checked text-primary"><i className="fa fa-check-square-o" aria-hidden="true"></i></div>
+									<div className="ca-checkbox ca-checked text-primary"><i className="fa fa-check-square-o" aria-hidden="true"></i></div>
 									:
-									<div className="col-1 ca-checkbox"><i className="fa fa-square-o" aria-hidden="true"></i></div>
+									<div className="ca-checkbox"><i className="fa fa-square-o" aria-hidden="true"></i></div>
 									}
 
-								<div className="col-1"><span className="text-muted">#{this.getFriendlyIDFromTag(v.tag)}</span></div>
-								<div className="col-4 ca-tag">{v.tag}</div>
-								<div className="col-3 text-right">
-									<div className="w-100 ca-item-small">{this.getMealFromOrder(v).product.name}</div>
-									<div className="w-100 ca-item-small">{this.getDrinkFromOrder(v).product.name}</div>
-								</div>
-								<div className="col-3 text-right">
+								<div className="mx-2"><span className="text-muted">#{this.getFriendlyIDFromTag(v.tag)}</span></div>
+								<div className="mx-2">{this.getMealFromOrder(v).product.name} + {this.getDrinkFromOrder(v).product.name}</div>
+								<div className="mx-2 ml-auto">{ v.destination.name }</div>
+								<div className="mx-2 ca-tag">{v.tag}</div>
+								<div className="ml-3 text-right">
 									<div className="w-100 ca-item-small">{v.user.full_name}</div>
 									<div className="w-100 ca-item-small">{this.getTimeFromOrder(v)}</div>
 								</div>
 							</div>
 						</div>
-					))}
+					))
+					:
+					<div className="list-group-item py-4" key="empty">
+						<div className="text-center font-weight-light text-black-50">Hidden</div>
+					</div>
+					}
 					{ this.props.data && this.props.data.length === 0 ?
 						<div className="list-group-item py-4" key="empty">
 							<div className="text-center font-weight-light text-black-50">nothing here</div>

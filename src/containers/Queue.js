@@ -188,6 +188,8 @@ class Queue extends React.Component {
 					</div>
 				</div>
 
+				<div className="my-5"></div>
+
 			</div>
 		)
 	}
