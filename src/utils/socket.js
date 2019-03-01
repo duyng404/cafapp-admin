@@ -73,15 +73,46 @@ export function commitQueue(q) {
 			onConnectErrorFunc('error');
 			setTimeout(() => {socket.open()},2000);
 		}
-	})
+	});
 }
 
 export function commitPrep(q) {
-	socket.emit('qfeed-commit-prep', q)
+	socket.emit('qfeed-commit-prep', q, function(response) {
+		if (response === 'okbro') {
+			console.log('okbro received')
+			return
+		} else {
+			console.log('no okbro?');
+			onConnectErrorFunc('error');
+			setTimeout(() => {socket.open()},2000);
+		}
+	});
 }
 
 export function commitShip(q) {
-	socket.emit('qfeed-commit-ship', q)
+	socket.emit('qfeed-commit-ship', q, function(response) {
+		if (response === 'okbro') {
+			console.log('okbro received')
+			return
+		} else {
+			console.log('no okbro?');
+			onConnectErrorFunc('error');
+			setTimeout(() => {socket.open()},2000);
+		}
+	});
+}
+
+export function commitApproach(q) {
+	socket.emit('qfeed-commit-approach', q, function(response) {
+		if (response === 'okbro') {
+			console.log('okbro received')
+			return
+		} else {
+			console.log('no okbro?');
+			onConnectErrorFunc('error');
+			setTimeout(() => {socket.open()},2000);
+		}
+	});
 }
 
 // listeners for basic connectivity states

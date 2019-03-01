@@ -34,6 +34,9 @@ class Queue extends React.Component {
 			case "ship":
 				return this.state.q.filter(v =>
 					v.status_code === types.OrderStatusShipping);
+			case "approach":
+				return this.state.q.filter(v =>
+					v.status_code === types.OrderStatusApproaching);
 			case "delivered":
 				return this.state.q.filter(v =>
 					v.status_code === types.OrderStatusDelivered);
@@ -101,6 +104,11 @@ class Queue extends React.Component {
 		socket.commitShip(q);
 	}
 
+	commitApproach(q) {
+		console.log("committing approach:", q);
+		socket.commitApproach(q);
+	}
+
 	onNewOrder(order) {
 		this.setState(prevState => ({q: [...prevState.q, order]}))
 	}
@@ -147,28 +155,35 @@ class Queue extends React.Component {
 					<div className="col-12 col-xl-6 mt-4">
 						<QueueList
 							data={this.extractData("queue")}
-							name="queued"
+							name="Placed"
 							commitAction={this.commitQueue}
 						/>
 					</div>
 					<div className="col-12 col-xl-6 mt-4">
 						<QueueList
 							data={this.extractData("prep")}
-							name="prepping"
+							name="Prepping"
 							commitAction={this.commitPrep}
 						/>
 					</div>
 					<div className="col-12 col-xl-6 mt-4">
 						<QueueList
 							data={this.extractData("ship")}
-							name="shipping"
+							name="Out for delivery"
 							commitAction={this.commitShip}
 						/>
 					</div>
 					<div className="col-12 col-xl-6 mt-4">
 						<QueueList
+							data={this.extractData("approach")}
+							name="Approaching"
+							commitAction={this.commitApproach}
+						/>
+					</div>
+					<div className="col-12 col-xl-6 mt-4">
+						<QueueList
 							data={this.extractData("delivered")}
-							name="delivered"
+							name="Delivered"
 						/>
 					</div>
 				</div>

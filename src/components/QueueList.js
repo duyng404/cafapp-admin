@@ -12,7 +12,9 @@ class QueueList extends React.Component {
 		this.toggleNext = this.toggleNext.bind(this);
 		this.state = {
 			selected: [],
+			collapsed: false,
 		}
+		if (this.props.collapsed) this.state.collapsed = true;
 	}
 	getFriendlyIDFromTag(s) {
 		const ss = s.split('-');
@@ -66,7 +68,7 @@ class QueueList extends React.Component {
 		return (
 			<>
 				<h4 className="text-center">{ this.props.name }</h4>
-				<FlipMove className="list-group">
+				<FlipMove className="list-group" enterAnimation="fade" leaveAnimation="fade">
 					{ this.props.data.map(v => (
 						<div className={`list-group-item py-0 ${this.state.selected.includes(v.id) ? 'bg-light' : ''}`} key={v.tag}>
 							<div className="row align-items-center ca-queue-row" onClick={() => this.toggleSelect(v.id)}>
