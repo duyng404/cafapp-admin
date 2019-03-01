@@ -184,6 +184,7 @@ class Queue extends React.Component {
 						<QueueList
 							data={this.extractData("delivered")}
 							name="Delivered"
+							collapsed
 						/>
 					</div>
 				</div>
