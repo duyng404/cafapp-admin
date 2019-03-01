@@ -78,14 +78,14 @@ class QueueList extends React.Component {
 				<div className="d-flex justify-content-between">
 					<div className="text-muted">total: { this.props.data.length }</div>
 					<div className="h4">{ this.props.name }</div>
-					<button className="btn btn-sm btn-link" type="button" onClick={this.toggleCollapse}>Hide</button>
+					<button className="btn btn-sm btn-link" type="button" onClick={this.toggleCollapse}>Hide/Show</button>
 				</div>
 				{/* <h4 className="text-center">
 					{ this.props.name }
 				</h4> */}
 				<FlipMove className="list-group" enterAnimation="fade" leaveAnimation="fade">
 					{ !this.state.collapsed ?
-					this.props.data.map(v => (
+					this.props.data.sort((a,b) => Moment(b.created_at).unix() - Moment(a.created_at).unix() ).map(v => (
 						<div className={`list-group-item py-0 ${this.state.selected.includes(v.id) ? 'bg-light' : ''}`} key={v.tag}>
 							<div className="d-flex justify-content-around align-items-center ca-queue-row" onClick={() => this.toggleSelect(v.id)}>
 
