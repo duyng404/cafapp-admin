@@ -7,6 +7,7 @@ export const OrderStatusQueued   = 30
 export const OrderStatusRequeued = 31
 export const OrderStatusPrepping  = 40
 export const OrderStatusShipping  = 50
+export const OrderStatusApproaching = 51
 export const OrderStatusDelivered = 60
 
 export const RowTypeNormal = 1
