@@ -29,6 +29,7 @@ class UserInfo extends React.Component {
                         <p>Fullname: {data.full_name}</p>
                         <p>Gus Username: {data.gus_username}</p>
                         <p>Gus ID: {data.gus_id}</p>
+                        <p>Codes Redeemed: {data.number_of_redeems}</p>
                     </div>
                 </div>
                 <h3>Past orders by {data.full_name}</h3>
