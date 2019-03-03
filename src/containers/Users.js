@@ -65,6 +65,8 @@ class Users extends React.Component {
 			.then(res => {
 				res.data.userInfo.allOrders = res.data.allOrders;
 				this.setState({ userInfo: res.data.userInfo });
+				const element = document.getElementById("user-details");
+				element.scrollIntoView({behavior: 'smooth'});
 				return
 			})
 			.catch(err => {
@@ -83,12 +85,6 @@ class Users extends React.Component {
 			.catch(err => {
 				console.log(err);
 			});
-	}
-
-	componentDidUpdate() {
-		const element = document.getElementById("user-details");
-		
-		element.scrollIntoView({behavior: 'smooth'});
 	}
 
 	render() {
