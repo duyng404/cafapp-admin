@@ -47,7 +47,7 @@ class Users extends React.Component {
 	handleFormSubmit(e) {
 		e.preventDefault();
 		const params = this.buildQueryParams();
-		const url = `${process.env.REACT_APP_BACKEND_URL}/api/admin/view-users?${params}`;
+		const url = `/api/admin/view-users?${params}`;
 		this.props.history.push(`/users?${params}`);
 		api.fetchUrl(url)
 			.then(res => {
@@ -87,7 +87,7 @@ class Users extends React.Component {
 
 	render() {
 		return (
-			<div>
+			<div className="ca-container">
 				<div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 					<h1 className="h2 font-weight-bold">Users Management</h1>
 					{/* <div>abcxyz</div> */}

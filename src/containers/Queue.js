@@ -16,6 +16,7 @@ class Queue extends React.Component {
 		this.onNewOrder = this.onNewOrder.bind(this);
 		this.state = {
 			q: [],
+			destinations: [],
 			queueStatus: 'connecting',
 		}
 	}
@@ -127,6 +128,19 @@ class Queue extends React.Component {
 			console.log(err);
 		})
 
+		// fetch destinations
+		api.fetchUrl("/api/admin/destination")
+		.then(response => {
+			if (!response.data || !Array.isArray(response.data) || response.data.length === 0) {
+				this.setState({destinations:[]});
+				return;
+			}
+			this.setState({destinations : response.data});
+		})
+		.catch(err => {
+			console.log(err);
+		})
+
 		// set socket event handlers
 		socket.onConnect(this.setQueueStatus);
 		socket.onConnectError(this.setQueueStatus);
@@ -145,42 +159,49 @@ class Queue extends React.Component {
 
 	render() {
 		return (
-			<div className="mt-5">
+			<div className="ca-container">
 				<div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-					<h1 className="h2">Queue Management</h1>
+					<h1 className="h2 font-weight-bold">Queue Management</h1>
 					<div>{this.renderQueueStatus()}</div>
+					<div className="alert alert-danger d-sm-none" role="alert">
+						Warning: Layout may not display correctly on mobile devices
+					</div>
 				</div>
 
-				<div className="row">
-					<div className="col-12 col-xl-6 mt-4">
+				<div className="row justify-content-center">
+					<div className="col-12 col-lg-6 mt-4 ca-queuelist-container">
 						<QueueList
 							data={this.extractData("queue")}
 							name="Placed"
 							commitAction={this.commitQueue}
+							destinations={this.state.destinations}
 						/>
 					</div>
-					<div className="col-12 col-xl-6 mt-4">
+					<div className="col-12 col-lg-6 mt-4 ca-queuelist-container">
 						<QueueList
 							data={this.extractData("prep")}
 							name="Prepping"
 							commitAction={this.commitPrep}
+							destinations={this.state.destinations}
 						/>
 					</div>
-					<div className="col-12 col-xl-6 mt-4">
+					<div className="col-12 col-lg-6 mt-4 ca-queuelist-container">
 						<QueueList
 							data={this.extractData("ship")}
 							name="Out for delivery"
 							commitAction={this.commitShip}
+							destinations={this.state.destinations}
 						/>
 					</div>
-					<div className="col-12 col-xl-6 mt-4">
+					<div className="col-12 col-lg-6 mt-4 ca-queuelist-container">
 						<QueueList
 							data={this.extractData("approach")}
 							name="Approaching"
 							commitAction={this.commitApproach}
+							destinations={this.state.destinations}
 						/>
 					</div>
-					<div className="col-12 col-xl-6 mt-4">
+					<div className="col-12 col-lg-6 mt-4 ca-queuelist-container">
 						<QueueList
 							data={this.extractData("delivered")}
 							name="Delivered"
