@@ -64,7 +64,9 @@ class Users extends React.Component {
 		api.fetchUrl(`${process.env.REACT_APP_BACKEND_URL}/api/admin/view-users/${e.target.value}`)
 			.then(res => {
 				res.data.userInfo.allOrders = res.data.allOrders;
-				this.setState({ userInfo: res.data.userInfo })
+				this.setState({ userInfo: res.data.userInfo });
+				const element = document.getElementById("user-details");
+				element.scrollIntoView({behavior: 'smooth'});
 				return
 			})
 			.catch(err => {
@@ -133,7 +135,7 @@ class Users extends React.Component {
 					<p className="text-muted">No results</p>
 				}
 				<div className="my-4"></div>
-				<h3>User Details</h3>
+				<h3 id="user-details">User Details</h3>
 				{Object.keys(this.state.userInfo).length !== 0 ?
 					<UserInfo user={this.state.userInfo} />
 					:
