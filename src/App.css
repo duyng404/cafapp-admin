@@ -7,13 +7,13 @@ body {
 }
 
 .ca-container {
-	max-width: 1010px;
+	max-width: 1500px;
 	margin-left:auto;
 	margin-right:auto;
 }
 
 .ca-queuelist-container {
-	max-width: 600px;
+	max-width: 800px;
 }
 
 .ca-queue-row {
@@ -27,7 +27,7 @@ body {
 	font-size: 1.5rem;
 	opacity: 0;
 	transition-property: opacity;
-	transition-duration: .2s;
+	transition-duration: .1s;
 }
 
 .ca-checkbox.ca-checked {

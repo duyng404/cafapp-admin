@@ -3,6 +3,7 @@ import QueueList from '../components/QueueList';
 import * as api from '../utils/api';
 import * as socket from '../utils/socket';
 import * as types from '../types';
+import moment from 'moment';
 
 class Queue extends React.Component {
 	constructor(props) {
@@ -14,10 +15,12 @@ class Queue extends React.Component {
 		this.commitShip = this.commitShip.bind(this);
 		this.updateQueue = this.updateQueue.bind(this);
 		this.onNewOrder = this.onNewOrder.bind(this);
+		this.fetchQueue = this.fetchQueue.bind(this);
 		this.state = {
 			q: [],
 			destinations: [],
 			queueStatus: 'connecting',
+			lastActivity: 0,
 		}
 	}
 
@@ -114,19 +117,30 @@ class Queue extends React.Component {
 		this.setState(prevState => ({q: [...prevState.q, order]}))
 	}
 
+	// call the api and update the queue completely every twenty seconds
+	// because default lastActivity is zero, it will always make the call the first time.
+	fetchQueue() {
+		const last = this.state.lastActivity;
+		const now = moment().unix();
+		if (now - last > 20) {
+			this.setState({ lastActivity: now });
+			api.fetchUrl("/api/admin/view-queue")
+			.then(response => {
+				if (!response.data || !Array.isArray(response.data) || response.data.length === 0) {
+					this.setState({q:[]});
+					return;
+				}
+				this.setState({q : response.data});
+			})
+			.catch(err => {
+				console.log(err);
+			})
+		}
+	}
+
 	componentDidMount() {
-		// fetch the current queue
-		api.fetchUrl("/api/admin/view-queue")
-		.then(response => {
-			if (!response.data || !Array.isArray(response.data) || response.data.length === 0) {
-				this.setState({q:[]});
-				return;
-			}
-			this.setState({q : response.data});
-		})
-		.catch(err => {
-			console.log(err);
-		})
+		// fetch queue, and set it to auto fetch
+		setInterval(this.fetchQueue, 1000);
 
 		// fetch destinations
 		api.fetchUrl("/api/admin/destination")
@@ -211,6 +225,29 @@ class Queue extends React.Component {
 				</div>
 
 				<div className="my-5"></div>
+
+				<div className="row">
+					<div className="col-12 col-sm">
+						<div class="alert alert-light" role="alert">
+							{ this.state.destinations.map(v => (
+								<div className="row">
+									<div className="col-4 text-right small">{v.tag}</div>
+									<div className="col small">{v.name}</div>
+								</div>
+							)) }
+						</div>
+					</div>
+					<div className="col-12 col-sm">
+						<div class="alert alert-info" role="alert">
+							meal here
+						</div>
+					</div>
+					<div className="col-12 col-sm">
+						<div class="alert alert-info" role="alert">
+							drink here
+						</div>
+					</div>
+				</div>
 
 			</div>
 		)
