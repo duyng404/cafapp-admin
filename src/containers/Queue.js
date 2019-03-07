@@ -3,6 +3,7 @@ import QueueList from '../components/QueueList';
 import * as api from '../utils/api';
 import * as socket from '../utils/socket';
 import * as types from '../types';
+import moment from 'moment';
 
 class Queue extends React.Component {
 	constructor(props) {
@@ -14,9 +15,12 @@ class Queue extends React.Component {
 		this.commitShip = this.commitShip.bind(this);
 		this.updateQueue = this.updateQueue.bind(this);
 		this.onNewOrder = this.onNewOrder.bind(this);
+		this.fetchQueue = this.fetchQueue.bind(this);
 		this.state = {
 			q: [],
+			destinations: [],
 			queueStatus: 'connecting',
+			lastActivity: 0,
 		}
 	}
 
@@ -113,15 +117,39 @@ class Queue extends React.Component {
 		this.setState(prevState => ({q: [...prevState.q, order]}))
 	}
 
+	// call the api and update the queue completely every twenty seconds
+	// because default lastActivity is zero, it will always make the call the first time.
+	fetchQueue() {
+		const last = this.state.lastActivity;
+		const now = moment().unix();
+		if (now - last > 20) {
+			this.setState({ lastActivity: now });
+			api.fetchUrl("/api/admin/view-queue")
+			.then(response => {
+				if (!response.data || !Array.isArray(response.data) || response.data.length === 0) {
+					this.setState({q:[]});
+					return;
+				}
+				this.setState({q : response.data});
+			})
+			.catch(err => {
+				console.log(err);
+			})
+		}
+	}
+
 	componentDidMount() {
-		// fetch the current queue
-		api.fetchUrl("/api/admin/view-queue")
+		// fetch queue, and set it to auto fetch
+		setInterval(this.fetchQueue, 1000);
+
+		// fetch destinations
+		api.fetchUrl("/api/admin/destination")
 		.then(response => {
 			if (!response.data || !Array.isArray(response.data) || response.data.length === 0) {
-				this.setState({q:[]});
+				this.setState({destinations:[]});
 				return;
 			}
-			this.setState({q : response.data});
+			this.setState({destinations : response.data});
 		})
 		.catch(err => {
 			console.log(err);
@@ -145,42 +173,49 @@ class Queue extends React.Component {
 
 	render() {
 		return (
-			<div className="mt-5">
+			<div className="ca-container">
 				<div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-					<h1 className="h2">Queue Management</h1>
+					<h1 className="h2 font-weight-bold">Queue Management</h1>
 					<div>{this.renderQueueStatus()}</div>
+					<div className="alert alert-danger d-sm-none" role="alert">
+						Warning: Layout may not display correctly on mobile devices
+					</div>
 				</div>
 
-				<div className="row">
-					<div className="col-12 col-xl-6 mt-4">
+				<div className="row justify-content-center">
+					<div className="col-12 col-lg-6 mt-4 ca-queuelist-container">
 						<QueueList
 							data={this.extractData("queue")}
 							name="Placed"
 							commitAction={this.commitQueue}
+							destinations={this.state.destinations}
 						/>
 					</div>
-					<div className="col-12 col-xl-6 mt-4">
+					<div className="col-12 col-lg-6 mt-4 ca-queuelist-container">
 						<QueueList
 							data={this.extractData("prep")}
 							name="Prepping"
 							commitAction={this.commitPrep}
+							destinations={this.state.destinations}
 						/>
 					</div>
-					<div className="col-12 col-xl-6 mt-4">
+					<div className="col-12 col-lg-6 mt-4 ca-queuelist-container">
 						<QueueList
 							data={this.extractData("ship")}
 							name="Out for delivery"
 							commitAction={this.commitShip}
+							destinations={this.state.destinations}
 						/>
 					</div>
-					<div className="col-12 col-xl-6 mt-4">
+					<div className="col-12 col-lg-6 mt-4 ca-queuelist-container">
 						<QueueList
 							data={this.extractData("approach")}
 							name="Approaching"
 							commitAction={this.commitApproach}
+							destinations={this.state.destinations}
 						/>
 					</div>
-					<div className="col-12 col-xl-6 mt-4">
+					<div className="col-12 col-lg-6 mt-4 ca-queuelist-container">
 						<QueueList
 							data={this.extractData("delivered")}
 							name="Delivered"
@@ -190,6 +225,29 @@ class Queue extends React.Component {
 				</div>
 
 				<div className="my-5"></div>
+
+				<div className="row">
+					<div className="col-12 col-sm">
+						<div class="alert alert-light" role="alert">
+							{ this.state.destinations.map(v => (
+								<div className="row">
+									<div className="col-4 text-right small">{v.tag}</div>
+									<div className="col small">{v.name}</div>
+								</div>
+							)) }
+						</div>
+					</div>
+					<div className="col-12 col-sm">
+						<div class="alert alert-info" role="alert">
+							meal here
+						</div>
+					</div>
+					<div className="col-12 col-sm">
+						<div class="alert alert-info" role="alert">
+							drink here
+						</div>
+					</div>
+				</div>
 
 			</div>
 		)
