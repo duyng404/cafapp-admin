@@ -5,9 +5,13 @@ class System extends React.Component {
 	constructor(props) {
 		super(props);
 		this.switchOnOff = this.switchOnOff.bind(this);
+		this.switchMenu = this.switchMenu.bind(this);
 		this.state = {
 			status: false,
 			fetching: true,
+			active_menu_id: 0,
+			menus: [],
+			fetchingmenu: true,
 		}
 	}
 
@@ -15,6 +19,15 @@ class System extends React.Component {
 		api.fetchUrl("/api/admin/cafapp-onoff")
 			.then(res => {
 				this.setState({ status: res.data.status, fetching: false });
+				return;
+			})
+			.catch(err => {
+				console.log(err);
+			});
+
+		api.fetchUrl("/api/admin/menu-status")
+			.then(res => {
+				this.setState({ active_menu_id: res.data.active_menu_id, menus: res.data.menus, fetchingmenu: false });
 				return;
 			})
 			.catch(err => {
@@ -35,6 +48,17 @@ class System extends React.Component {
 			});
 	}
 
+	switchMenu() {
+		this.setState({ fetchingmenu: true });
+		api.postUrl("/api/admin/menu-status", {set_to: 0})
+			.then(res => {
+				this.setState({ active_menu_id: res.data.active_menu_id, menus: res.data.menus, fetchingmenu: false });
+			})
+			.catch(err => {
+				console.log(err);
+			});
+	}
+
 	render() {
 		return (
 			<div className="ca-container">
@@ -49,6 +73,20 @@ class System extends React.Component {
 						<p>CafApp is currently {this.state.status ? 'Running' : 'Not Running'}.</p>
 						<button className="btn btn-primary" onClick={this.switchOnOff}>Turn {this.state.status ? 'Off' : 'On'}</button>
 					</>
+				}
+
+				<hr className="my-4"></hr>
+
+				<h3>Switch menu</h3>
+				{ this.state.fetchingmenu ? <p>Loading...</p> :
+					this.state.menus.map(v => (
+						v.id === this.state.active_menu_id ?
+						<>
+							<p>Current Active Menu is: {v.display_name}</p>
+							<button className="btn btn-primary" onClick={this.switchMenu}>Switch Menu</button>
+						</>
+						: null
+					))
 				}
 
 			</div>
