@@ -16,6 +16,9 @@ class TopBar extends React.Component{
 							<NavLink exact to="/" className="nav-link" activeClassName="active">Queue</NavLink>
 						</li>
 						<li className="nav-item">
+							<NavLink to="/driver" className="nav-link" activeClassName="active">Driver</NavLink>
+						</li>
+						<li className="nav-item">
 							<NavLink to="/orders" className="nav-link" activeClassName="active">Orders</NavLink>
 						</li>
 						<li className="nav-item">
@@ -29,7 +32,7 @@ class TopBar extends React.Component{
 						</li>
 					</ul>
 				</div>
-				<a className="nav-item text-danger pr-4 my-2" href={`${process.env.REACT_APP_BACKEND_URL}/logout`}>Logout</a>
+				<a className="nav-item text-muted pr-4 my-2" href={`${process.env.REACT_APP_BACKEND_URL}/dash`}>Back to main site</a>
 			</nav>
 
 		);

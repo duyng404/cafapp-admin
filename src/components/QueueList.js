@@ -137,8 +137,6 @@ class QueueList extends React.Component {
 												<div className="w-100" key={vvv.id}>{vvv.product.name}</div>
 											))
 										})}
-										{/* <div className="w-100">{this.getMealFromOrder(v).product.name}</div>
-										<div className="w-100">{this.getDrinkFromOrder(v).product.name}</div> */}
 									</div>
 									<div className="mx-2 ml-auto">{ v.destination.name }</div>
 									{/* <div className="mx-2 d-lg-none d-xl ca-tag">{ v.tag }</div> */}
