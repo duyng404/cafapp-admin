@@ -25,6 +25,7 @@ export const userType = PropTypes.shape ({
 	email: PropTypes.string,
 	gus_username: PropTypes.string,
 	gus_id: PropTypes.number,
+	phone_number: PropTypes.string,
 })
 
 export const productType = PropTypes.shape ({
@@ -39,17 +40,37 @@ export const productType = PropTypes.shape ({
 	status: PropTypes.number,
 })
 
+export const menuItemType = PropTypes.shape ({
+	id: PropTypes.number,
+	display_name: PropTypes.string,
+	display_price_in_cents: PropTypes.number,
+	image_url: PropTypes.string,
+	description: PropTypes.string,
+	description_HTML: PropTypes.string,
+	starting_main: productType,
+	starting_main_id: PropTypes.number,
+	starting_side: productType,
+	starting_side_id: PropTypes.number,
+	menu_id: PropTypes.number,
+})
+
+export const subRowType = PropTypes.shape ({
+	id: PropTypes.number,
+	product_id: PropTypes.number,
+	product: productType,
+	order_row_id: PropTypes.number,
+})
+
 export const destinationType = PropTypes.shape ({
 	name: PropTypes.string,
 	tag: PropTypes.string,
 })
 
 export const orderRowType = PropTypes.shape ({
-	product_id: PropTypes.number,
-	product: productType,
-	quantity: PropTypes.number,
+	menu_item_id: PropTypes.number,
+	menu_item: productType,
 	subtotal_in_cents: PropTypes.number,
-	row_type: PropTypes.int,
+	sub_rows: PropTypes.arrayOf(subRowType),
 })
 
 export const orderType = PropTypes.shape ({

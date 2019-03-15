@@ -5,6 +5,8 @@ import AuthChecker from './components/AuthChecker';
 import Queue from './containers/Queue';
 import Redeemables from './containers/Redeemables';
 import Users from './containers/Users';
+import System from './containers/System';
+import Driver from './containers/Driver';
 import './App.css';
 
 class App extends React.Component {
@@ -33,9 +35,11 @@ class App extends React.Component {
 						<TopBar />
 						<div className="container-fluid">
 							<Route exact path="/" component={Queue} />
+							<Route path="/driver" component={Driver} />
 							<Route path="/orders" component={Orders} />
 							<Route path="/redeemables" component={Redeemables} />
 							<Route path="/users" component={Users} />
+							<Route path="/system" component={System} />
 						</div>
 					</>
 			}
