@@ -24,6 +24,9 @@ class TopBar extends React.Component{
 						<li className="nav-item">
 							<NavLink to="/redeemables" className="nav-link" activeClassName="active">Redeemables</NavLink>
 						</li>
+						<li className="nav-item">
+							<NavLink to="/system" className="nav-link" activeClassName="active">System</NavLink>
+						</li>
 					</ul>
 				</div>
 				<a className="nav-item text-danger pr-4 my-2" href={`${process.env.REACT_APP_BACKEND_URL}/logout`}>Logout</a>
