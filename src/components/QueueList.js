@@ -122,24 +122,30 @@ class QueueList extends React.Component {
 							<div className={`list-group-item py-0 ${this.state.selected.includes(v.id) ? 'bg-light' : ''}`} key={v.tag}>
 								<div className="d-flex justify-content-around align-items-center ca-queue-row" onClick={() => this.toggleSelect(v.id)}>
 
-										{/* checkbox */}
-										{ this.state.selected.includes(v.id) ?
-										<div className="ca-checkbox ca-checked text-primary"><i className="fa fa-check-square-o" aria-hidden="true"></i></div>
-										:
-										<div className="ca-checkbox"><i className="fa fa-square-o" aria-hidden="true"></i></div>
-										}
+									{/* checkbox */}
+									{ this.state.selected.includes(v.id) ?
+									<div className="ca-checkbox ca-checked text-primary"><i className="fa fa-check-square-o" aria-hidden="true"></i></div>
+									:
+									<div className="ca-checkbox"><i className="fa fa-square-o" aria-hidden="true"></i></div>
+									}
 
 									<div className="mx-2"><span className="text-muted">#{this.getFriendlyIDFromTag(v.tag)}</span></div>
 									{/* <div className="mx-2">{this.getMealFromOrder(v).product.name} + {this.getDrinkFromOrder(v).product.name}</div> */}
 									<div className="ml-3 text-left">
-										<div className="w-100">{this.getMealFromOrder(v).product.name}</div>
-										<div className="w-100">{this.getDrinkFromOrder(v).product.name}</div>
+										{v.order_rows.map(vv => {
+											return vv.sub_rows.map(vvv => (
+												<div className="w-100" key={vvv.id}>{vvv.product.name}</div>
+											))
+										})}
+										{/* <div className="w-100">{this.getMealFromOrder(v).product.name}</div>
+										<div className="w-100">{this.getDrinkFromOrder(v).product.name}</div> */}
 									</div>
 									<div className="mx-2 ml-auto">{ v.destination.name }</div>
 									{/* <div className="mx-2 d-lg-none d-xl ca-tag">{ v.tag }</div> */}
 									<div className="ml-3 text-right">
 										<div className="w-100 ca-item-small ca-tag">{ v.tag }</div>
 										<div className="w-100 ca-item-small ca-dimmed">{v.user.full_name}</div>
+										<div className="w-100 ca-item-small ca-dimmed">{v.user.phone_number}</div>
 										<div className="w-100 ca-item-small ca-dimmed">{this.getTimeFromOrder(v)}</div>
 									</div>
 								</div>

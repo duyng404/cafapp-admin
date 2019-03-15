@@ -8,6 +8,7 @@ import moment from 'moment';
 class Queue extends React.Component {
 	constructor(props) {
 		super(props);
+		this.interval = null;
 		this.extractData = this.extractData.bind(this);
 		this.setQueueStatus = this.setQueueStatus.bind(this);
 		this.commitQueue = this.commitQueue.bind(this);
@@ -19,6 +20,7 @@ class Queue extends React.Component {
 		this.state = {
 			q: [],
 			destinations: [],
+			products: [],
 			queueStatus: 'connecting',
 			lastActivity: 0,
 		}
@@ -140,7 +142,7 @@ class Queue extends React.Component {
 
 	componentDidMount() {
 		// fetch queue, and set it to auto fetch
-		setInterval(this.fetchQueue, 1000);
+		this.interval = setInterval(this.fetchQueue, 1000);
 
 		// fetch destinations
 		api.fetchUrl("/api/admin/destination")
@@ -150,6 +152,19 @@ class Queue extends React.Component {
 				return;
 			}
 			this.setState({destinations : response.data});
+		})
+		.catch(err => {
+			console.log(err);
+		})
+
+		// fetch products
+		api.fetchUrl("/api/admin/product")
+		.then(response => {
+			if (!response.data || !Array.isArray(response.data) || response.data.length === 0) {
+				this.setState({products:[]});
+				return;
+			}
+			this.setState({products : response.data});
 		})
 		.catch(err => {
 			console.log(err);
@@ -170,6 +185,9 @@ class Queue extends React.Component {
 		socket.initSocket()
 	}
 
+	componentWillUnmount() {
+		clearInterval(this.interval);
+	}
 
 	render() {
 		return (
@@ -228,9 +246,9 @@ class Queue extends React.Component {
 
 				<div className="row">
 					<div className="col-12 col-sm">
-						<div class="alert alert-light" role="alert">
+						<div className="alert alert-light" role="alert">
 							{ this.state.destinations.map(v => (
-								<div className="row">
+								<div className="row" key={v.tag}>
 									<div className="col-4 text-right small">{v.tag}</div>
 									<div className="col small">{v.name}</div>
 								</div>
@@ -238,13 +256,13 @@ class Queue extends React.Component {
 						</div>
 					</div>
 					<div className="col-12 col-sm">
-						<div class="alert alert-info" role="alert">
-							meal here
-						</div>
-					</div>
-					<div className="col-12 col-sm">
-						<div class="alert alert-info" role="alert">
-							drink here
+						<div className="alert alert-light" role="alert">
+							{ this.state.products.map(v => (
+								<div className="row" key={v.tag}>
+									<div className="col-4 text-right small">{v.tag}</div>
+									<div className="col small">{v.display_name}</div>
+								</div>
+							)) }
 						</div>
 					</div>
 				</div>
