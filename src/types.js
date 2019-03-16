@@ -13,8 +13,28 @@ export const OrderStatusDelivered = 60
 export const RowTypeNormal = 1
 export const RowTypeIncluded = 2
 
-// types
+export const verbalizeType = (code) => {
+	switch(code) {
+		case OrderStatusPlaced :
+			return "Placed"
+		case OrderStatusQueued :
+			return "Queued"
+		case OrderStatusRequeued :
+			return "Queued"
+		case OrderStatusPrepping :
+			return "Prepping"
+		case OrderStatusShipping :
+			return "Shipping"
+		case OrderStatusApproaching :
+			return "Approaching"
+		case OrderStatusDelivered :
+			return "Delivered"
+		default :
+			return "Code: " + code
+	}
+}
 
+// types
 export const userType = PropTypes.shape ({
 	id: PropTypes.number,
 	created_at: PropTypes.created_at,
@@ -73,6 +93,11 @@ export const orderRowType = PropTypes.shape ({
 	sub_rows: PropTypes.arrayOf(subRowType),
 })
 
+export const orderStatusUpdateType = PropTypes.shape({
+	created_at: PropTypes.string,
+	status_code: PropTypes.number,
+})
+
 export const orderType = PropTypes.shape ({
 	id: PropTypes.id,
 	created_at: PropTypes.string,
@@ -88,4 +113,5 @@ export const orderType = PropTypes.shape ({
 	destination_tag: PropTypes.string,
 	destination: destinationType,
 	status_code: PropTypes.number,
+	status_updates: PropTypes.arrayOf(orderStatusUpdateType),
 })
