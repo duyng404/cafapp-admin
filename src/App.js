@@ -5,6 +5,7 @@ import AuthChecker from './components/AuthChecker';
 import Queue from './containers/Queue';
 import Redeemables from './containers/Redeemables';
 import Users from './containers/Users';
+import Orders from './containers/Orders';
 import System from './containers/System';
 import Driver from './containers/Driver';
 import './App.css';
@@ -46,14 +47,6 @@ class App extends React.Component {
 			</Router>
     );
   }
-}
-
-function Orders() {
-  return (
-    <div>
-      <h2>Orders</h2>
-    </div>
-  );
 }
 
 export default App;
