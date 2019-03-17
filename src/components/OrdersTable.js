@@ -22,59 +22,59 @@ class OrdersTable extends React.Component {
     renderOrder(dataList) {
         const data = dataList.map((order,id) => {
             return (
-                <tr key = {id}>
+                <tr key={id}>
                     <th scope="row">{this.getFriendlyIDFromTag(order.tag)}</th>
                     <td>
-						<div class="w-100">
+						<div className="w-100">
 							{ order.order_rows.map(order_row => (
-								<>
-								<div class="mb-2">
+								<div className="mb-2" key={order_row.menu_item_id}>
 									<div className="font-weight-bold">{ order_row.menu_item.display_name }</div>
 
 									{ order_row.sub_rows.map(sub_row => (
-										<div class="d-flex justify-content-between align-items-center ml-4">
+										<div className="d-flex justify-content-between align-items-center ml-4" key={sub_row.id}>
 											<div>{ sub_row.product.display_name }</div>
 											<div className="font-weight-bold">{this.formatMoney(sub_row.product.price_in_cents)}</div>
 										</div>
 									))}
 								</div>
-
-								</>
 							))}
 
 							<hr />
 
-							<div class="d-flex justify-content-between align-items-center">
+							<div className="d-flex justify-content-between align-items-center">
 								<div className="font-weight-bold">Meal plan charge</div>
 								<div className="font-weight-bold text-info">{this.formatMoney(order.caf_account_charge_amount_in_cents)}</div>
 							</div>
 
-							<div class="d-flex justify-content-between align-items-center">
+							<div className="d-flex justify-content-between align-items-center">
 								<div className="font-weight-bold">Delivery Fee</div>
 								<div className="font-weight-bold">{this.formatMoney(order.delivery_fee_in_cents)}</div>
 							</div>
 
 							<hr />
 
-							<div class="d-flex justify-content-between align-items-center">
+							<div className="d-flex justify-content-between align-items-center">
 								<div>
-									<h5 class="font-weight-bold">Total</h5>
+									<h5 className="font-weight-bold">Total</h5>
 								</div>
 								<div className="font-weight-bold">{this.formatMoney(order.total_in_cents)}</div>
 								{/* <div>
-									<h5 class="font-weight-bold text-ca-yellow2">{{ formatMoney .order.TotalInCents }}</h5>
+									<h5 className="font-weight-bold text-ca-yellow2">{{ formatMoney .order.TotalInCents }}</h5>
 								</div> */}
 							</div>
 						</div>
 					</td>
 					<td>{types.verbalizeType(order.status_code)}</td>
 					<td>
-						<div>{order.user.first_name + " " + order.user.last_name}</div>
-						<div>{order.destination.name}</div>
+						<div><span className="font-weight-bold">Name:</span> {order.user.first_name + " " + order.user.last_name}</div>
+						<div><span className="font-weight-bold">GusID:</span> {order.user.gus_id}</div>
+						<div><span className="font-weight-bold">GusUsername:</span> {order.user.gus_username}</div>
+						<div><span className="font-weight-bold">Phone:</span> {order.user.phone_number}</div>
+						<div><span className="font-weight-bold">To:</span> {order.destination.name}</div>
 					</td>
 					<td>
-						{ order.status_updates.map(v => (
-							<div>{`${types.verbalizeType(v.status_code)} at ${Moment(v.created_at).format("MMM D h:mmA")}`}</div>
+						{ order.status_updates.map((v,id) => (
+							<div key={id}>{`${types.verbalizeType(v.status_code)} at ${Moment(v.created_at).format("MMM D h:mmA")}`}</div>
 						))}
 						<div></div>
 					</td>
