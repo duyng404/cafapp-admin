@@ -126,7 +126,7 @@ class Orders extends React.Component {
 					</div>
 				</div>
 
-				<h4 className="my-4 text-center">Currently showing: {this.state.currentDate === null ? 'All orders last 24 hours' : `All orders on ${moment(this.state.currentDate).format("MMM D h:mmA")}`}</h4>
+				<h4 className="my-4 text-center">Currently showing: {this.state.currentDate === null ? 'All orders last 24 hours' : `All orders on ${moment(this.state.currentDate).format("MMM D")}`}</h4>
 				{this.state.orders.length > 0 ?
 					<OrdersTable data={this.state.orders} />
 					:
