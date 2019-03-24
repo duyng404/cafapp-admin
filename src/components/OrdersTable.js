@@ -39,12 +39,12 @@ class OrdersTable extends React.Component {
 
 							<div className="d-flex justify-content-between align-items-center">
 								<div className="font-weight-bold">Meal plan charge</div>
-								<div className="font-weight-bold text-info">{Accounting.formatMoney(order.caf_account_charge_amount_in_cents)}</div>
+								<div className="font-weight-bold text-info">{Accounting.formatMoney(order.caf_account_charge_amount_in_cents / 100)}</div>
 							</div>
 
 							<div className="d-flex justify-content-between align-items-center">
 								<div className="font-weight-bold">Delivery Fee</div>
-								<div className="font-weight-bold">{Accounting.formatMoney(order.delivery_fee_in_cents)}</div>
+								<div className="font-weight-bold">{Accounting.formatMoney(order.delivery_fee_in_cents / 100)}</div>
 							</div>
 
 							<hr />
@@ -53,7 +53,7 @@ class OrdersTable extends React.Component {
 								<div>
 									<h5 className="font-weight-bold">Total</h5>
 								</div>
-								<div className="font-weight-bold">{Accounting.formatMoney(order.total_in_cents)}</div>
+								<div className="font-weight-bold">{Accounting.formatMoney(order.total_in_cents / 100)}</div>
 								{/* <div>
 									<h5 className="font-weight-bold text-ca-yellow2">{{ formatMoney .order.TotalInCents }}</h5>
 								</div> */}
