@@ -6,8 +6,12 @@ class System extends React.Component {
 		super(props);
 		this.switchOnOff = this.switchOnOff.bind(this);
 		this.switchMenu = this.switchMenu.bind(this);
+		this.onAnnouncementChange = this.onAnnouncementChange.bind(this);
+		this.setAnnouncement = this.setAnnouncement.bind(this);
 		this.state = {
 			status: false,
+			announcement: '',
+			tempAnnouncement: '',
 			fetching: true,
 			active_menu_id: 0,
 			menus: [],
@@ -18,7 +22,11 @@ class System extends React.Component {
 	componentDidMount() {
 		api.fetchUrl("/api/admin/cafapp-onoff")
 			.then(res => {
-				this.setState({ status: res.data.status, fetching: false });
+				this.setState({
+					status: res.data.status,
+					announcement: res.data.announcement,
+					tempAnnouncement: res.data.announcement,
+					fetching: false });
 				return;
 			})
 			.catch(err => {
@@ -41,7 +49,30 @@ class System extends React.Component {
 		this.setState({ fetching: true });
 		api.postUrl("/api/admin/cafapp-onoff", {set_to: target})
 			.then(res => {
-				this.setState({ status: res.data.status, fetching: false });
+				this.setState({ status:
+					res.data.status,
+					announcement: res.data.announcement,
+					tempAnnouncement: res.data.announcement,
+					fetching: false });
+			})
+			.catch(err => {
+				console.log(err);
+			});
+	}
+
+	onAnnouncementChange(e) {
+		this.setState({ tempAnnouncement: e.target.value });
+	}
+
+	setAnnouncement() {
+		this.setState({ fetching: true });
+		api.postUrl("/api/admin/set-announcement", {set_to: this.state.tempAnnouncement})
+			.then(res => {
+				this.setState({ status:
+					res.data.status,
+					announcement: res.data.announcement,
+					tempAnnouncement: res.data.announcement,
+					fetching: false });
 			})
 			.catch(err => {
 				console.log(err);
@@ -72,6 +103,27 @@ class System extends React.Component {
 					<>
 						<p>CafApp is currently {this.state.status ? 'Running' : 'Not Running'}.</p>
 						<button className="btn btn-primary" onClick={this.switchOnOff}>Turn {this.state.status ? 'Off' : 'On'}</button>
+					</>
+				}
+
+				<hr className="my-4"></hr>
+
+				<h3>Set/Unset announcement</h3>
+				<p className="text-muted">Leaving blank will disable it from showing</p>
+				{ this.state.fetching ? <p>Loading...</p> :
+					<>
+						<p>Current announcement: {this.state.announcement}</p>
+						<div class="input-group" style={{maxWidth: '700px'}}>
+							<input type="text" class="form-control" onChange={this.onAnnouncementChange} value={this.state.tempAnnouncement} />
+							<div class="input-group-append">
+								<button className="btn btn-primary" onClick={this.setAnnouncement}>Save</button>
+							</div>
+						</div>
+						<p>Preview announcement:</p>
+						<div class="alert alert-primary ml-auto mr-auto spotlight-announcement" role="alert" style={{maxWidth: '700px'}}>
+							<i class="fa fa-info-circle" aria-hidden="true"></i>&nbsp;
+							{this.state.tempAnnouncement}
+						</div>
 					</>
 				}
 
