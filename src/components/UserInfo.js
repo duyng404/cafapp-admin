@@ -1,5 +1,6 @@
 import React from 'react';
 import Moment from 'moment';
+import * as types from '../types';
 class UserInfo extends React.Component {
     formatDate(dateStr){
         //jan 22 8:00pm
@@ -13,7 +14,7 @@ class UserInfo extends React.Component {
                     <td>{order.destination.name}</td>
                     <td>{this.formatDate(order.created_at)}</td>
                     <td>${order.total_in_cents/100}</td>
-                    <td>{order.status_code}</td>
+                    <td>{types.verbalizeType(order.status_code)}</td>
                     <td><button className="btn btn-link">View details</button></td>
                 </tr>
             );
