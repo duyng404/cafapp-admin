@@ -32,6 +32,7 @@ class UserTable extends React.Component {
                         {this.renderUser(this.props.data)}
                     </tbody>
                 </table>
+                <p className="text-muted">Total Users: {this.props.data.length}</p>
             </div>
         )
     }
