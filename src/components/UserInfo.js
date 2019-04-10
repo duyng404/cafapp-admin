@@ -1,6 +1,7 @@
 import React from 'react';
 import Moment from 'moment';
 import * as types from '../types';
+import Accounting from 'accounting';
 class UserInfo extends React.Component {
     formatDate(dateStr){
         //jan 22 8:00pm
@@ -31,6 +32,7 @@ class UserInfo extends React.Component {
                         <p>Gus Username: {data.gus_username}</p>
                         <p>Gus ID: {data.gus_id}</p>
                         <p>Codes Redeemed: {data.number_of_redeems}</p>
+                        <p>Current Balance: {Accounting.formatMoney(data.current_balance_in_cents / 100)}</p>
                     </div>
                 </div>
                 <h3>Past orders by {data.full_name}</h3>
