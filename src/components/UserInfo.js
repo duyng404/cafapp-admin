@@ -14,7 +14,7 @@ class UserInfo extends React.Component {
                     <td>{order.id}</td>
                     <td>{order.destination.name}</td>
                     <td>{this.formatDate(order.created_at)}</td>
-                    <td>${order.total_in_cents/100}</td>
+                    <td>{Accounting.formatMoney(order.total_in_cents/100)}</td>
                     <td>{types.verbalizeType(order.status_code)}</td>
                     <td><button className="btn btn-link">View details</button></td>
                 </tr>
