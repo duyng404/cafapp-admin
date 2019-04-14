@@ -92,7 +92,7 @@ class Orders extends React.Component {
 	}
 
 	handleDatePickerChange(date) {
-		this.setState({ currentDate: date }, this.fetchData);
+		this.setState({ orders: [], currentDate: date }, this.fetchData);
 		// console.log("changing date to:", date);
 		// console.log(moment(date).utc().toISOString());
 	}
